@@ -1,10 +1,5 @@
 package ohm.softa.a08.filtering;
 
-import ohm.softa.a08.filtering.filters.AllMealsStrategy;
-import ohm.softa.a08.filtering.filters.NoPorkStrategy;
-import ohm.softa.a08.filtering.filters.NoSoyStrategy;
-import ohm.softa.a08.filtering.filters.VegetarianStrategy;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,10 +13,10 @@ public abstract class MealFilterFactory {
 
 	static {
 		/* fill 'cache' in static constructor */
-		filters.put("All", new AllMealsStrategy());
-		filters.put("Vegetarian", new VegetarianStrategy());
-		filters.put("No pork", new NoPorkStrategy());
-		filters.put("No soy", new NoSoyStrategy());
+		filters.put("All", new NoFilter());
+		filters.put("Vegetarian", new CategoryFilter(true,"vegetarisch", "vegan"));
+		filters.put("No pork", new CategoryFilter(false, "schwein"));
+		filters.put("No soy", new NotesFilter("soja"));
 	}
 
 	/* private constructor to ensure that singleton cannot be instantiated outside of the class
@@ -31,10 +26,10 @@ public abstract class MealFilterFactory {
 
 	/**
 	 * Get the matching strategy to the given keyword
-	 * if strategy is unknown the factory will fallback to the AllMealsStrategy
+	 * if strategy is unknown the factory will fallback to the NoFilter
 	 *
 	 * @param key key to resolve strategy
-	 * @return MealsFilter instance corresponding to the given key or AllMealsStrategy as fallback
+	 * @return MealsFilter instance corresponding to the given key or NoFilter as fallback
 	 */
 	public static MealsFilter getStrategy(String key) {
 		return filters.getOrDefault(key, filters.get("All"));
@@ -42,22 +37,22 @@ public abstract class MealFilterFactory {
 
 	/**
 	 * Get the matching strategy to the given keyword
-	 * if strategy is unknown the factory will fallback to the AllMealsStrategy
+	 * if strategy is unknown the factory will fallback to the NoFilter
 	 * Method does not cache strategy instances but creates a new instance per call
 	 *
 	 * @param key key to resolve strategy
-	 * @return MealsFilter instance corresponding to the given key or AllMealsStrategy as fallback
+	 * @return MealsFilter instance corresponding to the given key or NoFilter as fallback
 	 */
 	public static MealsFilter getStrategyThroughSwitch(String key) {
 		switch (key) {
 			case "Vegetarian":
-				return new VegetarianStrategy();
+				return new CategoryFilter(true, "vegetarisch", "vegan");
 			case "No soy":
-				return new NoSoyStrategy();
+				return new CategoryFilter(false, "schwein");
 			case "No pork":
-				return new NoPorkStrategy();
+				return new NotesFilter("soja");
 			default:
-				return new AllMealsStrategy();
+				return new NoFilter();
 		}
 	}
 }

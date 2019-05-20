@@ -1,13 +1,14 @@
 package ohm.softa.a08.filtering;
 
 
+import ohm.softa.a08.filtering.FilterBase;
 import ohm.softa.a08.model.Meal;
 
-public abstract class NotesFilterBase extends FilterBase {
+public class NotesFilter extends FilterBase {
 
 	private final String[] keywordsToExclude;
 
-	protected NotesFilterBase(String[] keyWordsToExclude) {
+	protected NotesFilter(String... keyWordsToExclude) {
 		this.keywordsToExclude = keyWordsToExclude;
 	}
 

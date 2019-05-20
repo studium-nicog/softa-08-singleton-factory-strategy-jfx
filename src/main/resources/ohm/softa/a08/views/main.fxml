@@ -9,7 +9,15 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ohm.softa.a08.controller.MainController">
+<?import javafx.scene.control.Spinner?>
+<?import java.lang.Integer?>
+<?import javafx.scene.control.Label?>
+<GridPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ohm.softa.a08.controller.MainController" alignment="CENTER">
+	<fx:define>
+		<Integer fx:id="min" fx:value="0"/>
+		<Integer fx:id="max" fx:value="10"/>
+	</fx:define>
+
 	<columnConstraints>
 		<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
 	</columnConstraints>
@@ -31,6 +39,16 @@
 				<Insets bottom="5.0" left="10.0" top="5.0" />
 			</HBox.margin>
 		</Button>
+		<Label text="Tage von heute ab">
+			<HBox.margin>
+				<Insets bottom="5.0" left="10.0" top="5.0" />
+			</HBox.margin>
+		</Label>
+		<Spinner fx:id="spinner" min="$min" max="$max">
+			<HBox.margin>
+				<Insets bottom="5.0" left="10.0" top="5.0" />
+			</HBox.margin>
+		</Spinner>
 	</HBox>
 	<ListView fx:id="mealsListView" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
 </GridPane>

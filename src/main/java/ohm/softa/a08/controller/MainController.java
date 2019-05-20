@@ -1,6 +1,7 @@
 package ohm.softa.a08.controller;
 
 import com.google.gson.Gson;
+import javafx.scene.control.*;
 import ohm.softa.a08.api.OpenMensaAPI;
 import ohm.softa.a08.filtering.MealFilterFactory;
 import ohm.softa.a08.model.Meal;
@@ -10,9 +11,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
 import ohm.softa.a08.service.OpenMensaAPIService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,6 +56,10 @@ public class MainController implements Initializable {
 	@FXML
 	private ListView<Meal> mealsListView;
 
+
+	@FXML
+	private Spinner<Integer> spinner;
+
 	/*
 	  static initializer to initialize fields in class
 	 */
@@ -85,6 +87,11 @@ public class MainController implements Initializable {
 		mealsListView.setItems(meals);
 		filterChoiceBox.setItems(FXCollections.observableList(Arrays.asList(new Gson().fromJson(new InputStreamReader(getClass().getResourceAsStream("/filters.json")), String[].class))));
 		filterChoiceBox.getSelectionModel().selectFirst();
+
+
+		SpinnerValueFactory<Integer> valueFactory = //
+			new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 5, 0);
+		spinner.setValueFactory(valueFactory);
 	}
 
 	/**
@@ -97,7 +104,9 @@ public class MainController implements Initializable {
 		var filter = MealFilterFactory.getStrategy(currentFilterName);
 
 		/* get API instance from service singleton to execute call */
-		OpenMensaAPIService.getInstance().getApi().getMeals(openMensaDateFormat.format(new Date())).enqueue(new Callback<>() {
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.DATE, spinner.getValue());
+		OpenMensaAPIService.getInstance().getApi().getMeals(openMensaDateFormat.format(c.getTime())).enqueue(new Callback<>() {
 			@Override
 			public void onResponse(Call<List<Meal>> call, Response<List<Meal>> response) {
 				logger.debug("Got response");
