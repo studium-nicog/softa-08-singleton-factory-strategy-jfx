@@ -86,8 +86,9 @@ The selected item should be used to select the corresponding strategy by passing
 1. Declare the interface `MealsFilter`
 2. Implement the `NoFilter` class
 3. _Optionally:_ implement the `FilterBase` class (it's totally fine for now to implement all filters without an base class)
-4. Implement the filters `CategoryFilter` and `NotesFilter`
-5. Implement the `FilterFactory` class
+4. Implement the `CategoryFilter` that either _includes_ or _excludes_ meals where the given categories match
+5. Implement the `NotesFilter` that _excludes_ meals where given terms match on the notes (eg. "soja" to exclude dishes "mit Soja")
+6. Implement the `FilterFactory` class
 
 > Remark: again the given UML for the FilterFactory is just a recommondation.
 > You don't have to stick to this draft.
