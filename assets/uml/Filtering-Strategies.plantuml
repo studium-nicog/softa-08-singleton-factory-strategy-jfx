@@ -1,6 +1,6 @@
 @startuml FilteringStrategies
 
-package de.thro.inf.prg3.a08.filtering {
+package ohm.softa.a08.filtering {
 
     interface MealsFilter {
         filter(meals: List<Meal>): List<Meal>

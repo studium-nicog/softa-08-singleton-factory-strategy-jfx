@@ -1,4 +1,4 @@
-package de.thro.inf.prg3.a08.model;
+package ohm.softa.a08.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -54,11 +54,16 @@ public class Meal {
 	}
 
 	public boolean isVegetarian() {
+		return category.toLowerCase().equals("vegetarisch")
+			|| category.toLowerCase().equals("vegan");
+		/*
+		// different cafeterias may encode meats on the notes
 		var containsMeat = false;
 		for(var s : notes){
 			containsMeat = containsMeat || s.contains("fleisch");
 		}
 		return !containsMeat;
+		*/
 	}
 
 	@Override

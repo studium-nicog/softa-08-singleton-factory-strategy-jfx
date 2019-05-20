@@ -1,6 +1,6 @@
-package de.thro.inf.prg3.a08.tests;
+package ohm.softa.a08.tests;
 
-import de.thro.inf.prg3.a08.api.OpenMensaAPI;
+import ohm.softa.a08.api.OpenMensaAPI;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.apache.logging.log4j.LogManager;

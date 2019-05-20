@@ -1,6 +1,7 @@
-package de.thro.inf.prg3.a08;
+package ohm.softa.a08;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -17,10 +18,13 @@ public class App extends Application {
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage stage) throws Exception {
 		var root = FXMLLoader.<Parent>load(getClass().getResource("views/main.fxml"));
-		primaryStage.setTitle("Cafeteria");
-		primaryStage.setScene(new Scene(root, 800, 600));
-		primaryStage.show();
+
+		stage.setTitle("Cafeteria");
+		stage.setScene(new Scene(root, 800, 600));
+		stage.show();
+
+		stage.setOnCloseRequest(v -> Platform.exit());
 	}
 }

@@ -2,7 +2,7 @@
 
 left to right direction
 
-package de.thro.inf.prg3.a08 {
+package ohm.softa.a08 {
 
     interface OpenMensaAPI {
         getMeals(date: String): Call<List<Meal>>

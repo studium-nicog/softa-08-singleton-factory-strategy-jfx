@@ -1,8 +1,8 @@
-package de.thro.inf.prg3.a08.controller;
+package ohm.softa.a08.controller;
 
 import com.google.gson.Gson;
-import de.thro.inf.prg3.a08.api.OpenMensaAPI;
-import de.thro.inf.prg3.a08.model.Meal;
+import ohm.softa.a08.api.OpenMensaAPI;
+import ohm.softa.a08.model.Meal;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,6 +24,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Controller for main.fxml
@@ -100,33 +101,45 @@ public class MainController implements Initializable {
 	/**
 	 * Handles fetching of meals from OpenMensa API
 	 */
-	private void doGetMeals() {
+	@FXML
+	public void doGetMeals() {
 		api.getMeals(openMensaDateFormat.format(new Date())).enqueue(new Callback<>() {
 			@Override
 			public void onResponse(Call<List<Meal>> call, Response<List<Meal>> response) {
 				logger.debug("Got response");
-				if (!response.isSuccessful() || response.body() == null) {
-					logger.error(String.format("Got response with not successfull code %d", response.code()));
-					Platform.runLater(() -> {
-						var alert = new Alert(Alert.AlertType.ERROR);
-						alert.setHeaderText("Unsuccessful HTTP call");
-						alert.setContentText("Failed to get meals from OpenMensaAPI");
-						alert.show();
-					});
-					return;
-				}
 
-				meals.clear();
-				meals.addAll(response.body());
+				Platform.runLater(() -> {
+					if (!response.isSuccessful() || response.body() == null) {
+						logger.error(String.format("Got response with not successfull code %d", response.code()));
+
+							var alert = new Alert(Alert.AlertType.ERROR);
+							alert.setHeaderText("Unsuccessful HTTP call");
+							alert.setContentText("Failed to get meals from OpenMensaAPI");
+							alert.show();
+
+						return;
+					}
+
+					meals.clear();
+
+					if ("Vegetarian".equals(filterChoiceBox.getValue()))
+						meals.addAll(response.body().stream()
+							.filter(Meal::isVegetarian)
+							.collect(Collectors.toList()));
+					else
+						meals.addAll(response.body());
+				});
 			}
 
 			@Override
 			public void onFailure(Call<List<Meal>> call, Throwable t) {
 				logger.error("Failed to fetch meals");
-				var alert = new Alert(Alert.AlertType.ERROR);
-				alert.setHeaderText("Failed HTTP call");
-				alert.setContentText("Failed to submit HTTP call to fetch meals.");
-				alert.show();
+				Platform.runLater(() -> {
+					var alert = new Alert(Alert.AlertType.ERROR);
+					alert.setHeaderText("Failed HTTP call");
+					alert.setContentText("Failed to submit HTTP call to fetch meals.");
+					alert.show();
+				});
 			}
 		});
 	}

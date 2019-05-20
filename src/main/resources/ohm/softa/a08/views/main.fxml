@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.thro.inf.prg3.a08.controller.MainController">
+<GridPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ohm.softa.a08.controller.MainController">
 	<columnConstraints>
 		<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
 	</columnConstraints>
@@ -26,7 +26,7 @@
 				<Insets bottom="5.0" left="10.0" top="5.0" />
 			</HBox.margin>
 		</ChoiceBox>
-		<Button mnemonicParsing="false" text="Refresh">
+		<Button mnemonicParsing="false" onAction="#doGetMeals" text="Refresh">
 			<HBox.margin>
 				<Insets bottom="5.0" left="10.0" top="5.0" />
 			</HBox.margin>
