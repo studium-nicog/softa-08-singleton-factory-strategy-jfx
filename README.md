@@ -55,8 +55,8 @@ As we only need to display static strings to distinguish between different filte
 Additionally to the already implemented vegetarian filter of the last assignment we want to introduce the following filtering choices:
 
 * **All** - no elements are filtered (the default)
-* **No pork** - show all meals except those containing pork
-* **No soy** - show all meals except those containing soy  
+* **No pork** - show all meals except those containing pork (for Nürnberg, this is coded as _category_ "Schwein")
+* **No soy** - show all meals except those containing soy (for Nürnberg, this is coded on the _notes_ as "mit Soja") 
 
 To implement the filter mechanism we could just extend the existing logic by adding some more `if-else` statements.
 This approach isn't very flexible and results in a huge code statement which isn't readable any more so that's not what we want.
@@ -70,7 +70,7 @@ It is also a nice application of inheritance to avoid duplicates and reduce the 
 
 > Additional explanations: 
 > To avoid duplicate code (DRY - don't repeat yourself!) you can extract the code to iterate over the list of meals and collect matching meals to an `abstract` base class `FilterBase` where you pass every meal to an `protected abstract` method which decides if the meal should be included or not.
-> The `AllMealsStrategy` is handled otherwise because this strategy does not have to filter anything.
+> The `NoFilter` is handled separately since this strategy does not filter anything.
 
 The remaining problem is how to get an instance of the currently required strategy.
 This is where the factory pattern comes into play.
@@ -84,9 +84,9 @@ The selection model has two methods `getSelectedIndex()` and `getSelectedItem()`
 The selected item should be used to select the corresponding strategy by passing the string to the `getStrategy(...)` method of the `MealsFilterFactory`.
 
 1. Declare the interface `MealsFilter`
-2. Implement the `AllMealsStrategy` class
+2. Implement the `NoFilter` class
 3. _Optionally:_ implement the `FilterBase` class (it's totally fine for now to implement all filters without an base class)
-4. Implement the filters `VegetarianStrategy`, `NoPorkStrategy`, `NoSoyStrategy`
+4. Implement the filters `CategoryFilter` and `NotesFilter`
 5. Implement the `FilterFactory` class
 
 > Remark: again the given UML for the FilterFactory is just a recommondation.

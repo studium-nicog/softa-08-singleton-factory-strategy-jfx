@@ -6,7 +6,7 @@ package ohm.softa.a08.filtering {
         filter(meals: List<Meal>): List<Meal>
     }
 
-    class AllMealsStrategy implements MealsFilter {
+    class NoFilter implements MealsFilter {
 
     }
 
@@ -14,15 +14,11 @@ package ohm.softa.a08.filtering {
         #include(m: Meal): boolean
     }
 
-    class VegetarianStrategy extends FilterBase {
+    class CategoryFilter extends FilterBase {
 
     }
 
-    class NoPorkStrategy extends FilterBase {
-
-    }
-
-    class NoSoyStrategy extends FilterBase {
+    class NotesFilter extends FilterBase {
 
     }
 }
