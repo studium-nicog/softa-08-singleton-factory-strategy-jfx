@@ -48,9 +48,9 @@ public abstract class MealFilterFactory {
 			case "Vegetarian":
 				return new CategoryFilter(true, "vegetarisch", "vegan");
 			case "No soy":
-				return new CategoryFilter(false, "schwein");
-			case "No pork":
 				return new NotesFilter("soja");
+			case "No pork":
+				return new CategoryFilter(false, "schwein");
 			default:
 				return new NoFilter();
 		}
