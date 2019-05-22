@@ -1,8 +1,9 @@
-package de.thro.inf.prg3.a08.tests;
+package ohm.softa.a08.tests;
 
-import de.thro.inf.prg3.a08.filtering.MealsFilter;
-import de.thro.inf.prg3.a08.filtering.MealFilterFactory;
-import de.thro.inf.prg3.a08.model.Meal;
+
+import ohm.softa.a08.filtering.MealFilterFactory;
+import ohm.softa.a08.filtering.MealsFilter;
+import ohm.softa.a08.model.Meal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +24,7 @@ class MealsFilterTests {
 	@BeforeEach
 	void setup() {
 		meals = new LinkedList<>();
-		meals.add(new Meal(1, "Pork", "", "Schweinefleisch"));
+		meals.add(new Meal(1, "Pork", "schwein", "Schweinefleisch"));
 		meals.add(new Meal(2, "Soy", "", "Soja"));
 		meals.add(new Meal(3, "Beef", "", "Rindergulasch"));
 	}
@@ -61,6 +62,6 @@ class MealsFilterTests {
 		List<Meal> filtered = vegetarianFilter.filter(meals);
 
 		assertNotNull(filtered);
-		assertEquals(1, filtered.size());
+		assertEquals(0, filtered.size());
 	}
 }
