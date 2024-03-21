@@ -1,30 +1,29 @@
 package ohm.softa.a08.controller;
 
 import com.google.gson.Gson;
-import ohm.softa.a08.api.OpenMensaAPI;
-import ohm.softa.a08.model.Meal;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
+import ohm.softa.a08.filtering.MealsFilterFactory;
+import ohm.softa.a08.model.Meal;
+import ohm.softa.a08.service.OpenMensaApiService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Controller for main.fxml
@@ -42,8 +41,6 @@ public class MainController implements Initializable {
 	 * DateFormat instance to generate required date format string for OpenMensa API
 	 */
 	private static final DateFormat openMensaDateFormat;
-
-	private final OpenMensaAPI api;
 	private final ObservableList<Meal> meals;
 	private final Gson gson;
 
@@ -73,15 +70,6 @@ public class MainController implements Initializable {
 	public MainController() {
 		meals = FXCollections.observableArrayList();
 		gson = new Gson();
-
-		/* initialize Retrofit instance */
-		var retrofit = new Retrofit.Builder()
-			.addConverterFactory(GsonConverterFactory.create(gson))
-			.baseUrl("http://openmensa.org/api/v2/")
-			.build();
-
-		/* create OpenMensaAPI instance */
-		api = retrofit.create(OpenMensaAPI.class);
 	}
 
 	/**
@@ -96,6 +84,8 @@ public class MainController implements Initializable {
 		mealsListView.setItems(meals);
 		filterChoiceBox.setItems(FXCollections.observableList(Arrays.asList(gson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/filters.json")), String[].class))));
 		doGetMeals();
+
+		filterChoiceBox.setOnAction(event -> doGetMeals());
 	}
 
 	/**
@@ -103,7 +93,7 @@ public class MainController implements Initializable {
 	 */
 	@FXML
 	public void doGetMeals() {
-		api.getMeals(openMensaDateFormat.format(new Date())).enqueue(new Callback<>() {
+		OpenMensaApiService.getInstance().getApi().getMeals(openMensaDateFormat.format(new Date())).enqueue(new Callback<>() {
 			@Override
 			public void onResponse(Call<List<Meal>> call, Response<List<Meal>> response) {
 				logger.debug("Got response");
@@ -122,12 +112,7 @@ public class MainController implements Initializable {
 
 					meals.clear();
 
-					if ("Vegetarian".equals(filterChoiceBox.getValue()))
-						meals.addAll(response.body().stream()
-							.filter(Meal::isVegetarian)
-							.collect(Collectors.toList()));
-					else
-						meals.addAll(response.body());
+					meals.addAll(MealsFilterFactory.getStrategy(filterChoiceBox.getValue()).filter(response.body()));
 				});
 			}
 
